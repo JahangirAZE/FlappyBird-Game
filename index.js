@@ -49,6 +49,8 @@ window.onload = function() {
   bottomPipeImg = new Image();
   bottomPipeImg.src = "./images/bottompipe.png";
 
+  highScore = Number(localStorage.getItem("high-score")) || 0;
+
   requestAnimationFrame(update);
   setInterval(placePipes, 1500);
   board.addEventListener("touchstart", function(e){
@@ -80,6 +82,7 @@ function update(){
     if(!pipe.passed && bird.x > pipe.x + pipe.width){
       score += 0.5;
       pipe.passed = true;
+      updateHighScore();
     }
 
     if(detectCollision(bird, pipe)) gameOver = true;
@@ -95,6 +98,13 @@ function update(){
   context.fillText("Score: " + Math.floor(score), 5, 30);
   context.fillText("High Score: " + Math.floor(highScore), 5, 60);
   if(gameOver) context.fillText("Game Over", 5, 90);
+}
+
+function updateHighScore(){
+  if(score > highScore){
+    highScore = score;
+    localStorage.setItem("high-score", highScore);
+  }
 }
 
 function placePipes(){
